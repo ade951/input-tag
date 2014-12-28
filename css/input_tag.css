@@ -29,6 +29,10 @@
 	outline: none;
 	font-weight: bold;
 	font-family: serif, monospace;
+	width: 40px;
+}
+.width-helper{
+	display: none;
 }
 .tag{
 	color: #fff;
