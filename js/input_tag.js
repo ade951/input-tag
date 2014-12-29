@@ -3,9 +3,17 @@ $.fn.extend({inputtag: function(){
 	var self = this;
 	var input_text = self.children('.input-text');
 	var input_field = self.children('.input-field');
+	var isDelSelectedTagsEventSet = false;
 
-	self.click(function(){
-		input_text.focus();
+	self.click(function(e){
+		var target = getEventTarget(e);
+		if(!$(target).hasClass('tag')){
+			resetSelectedTags();
+			input_text.focus();
+		}
+	}).delegate('.tag', 'click', function(){
+		resetSelectedTags();
+		selectTag($(this));
 	});
 
 	input_text.focus(function(){
@@ -14,12 +22,23 @@ $.fn.extend({inputtag: function(){
 		self.removeClass('focus');
 	});
 
-	input_text.keydown(function(e){
+	$(document).click(function(e){
+		var target = getEventTarget(e);
+		var selefElements = self.find('*').add(self);
+		if($.inArray(target, selefElements) == -1){
+			resetSelectedTags();
+			detachDelSelectedTagsEvent();
+		}
+		else{
+			attachDelSelectedTagsEvent();
+		}
+	});
 
+	input_text.keydown(function(e){
 		//enter key or comma: to finish a tag
 		if(e.keyCode == 13 || e.keyCode == 188){
 			
-			e.preventDefault();
+			preventDefault(e);
 
 			var tag_content = $(this).val();
 			if(!tag_content){
@@ -27,22 +46,17 @@ $.fn.extend({inputtag: function(){
 			}
 
 			var tag = $('<div class="tag">').text( tag_content );
-			var tag_types = ['primary', 'success', 'info', 'warning'];
-			var tag_type_index = Math.floor( Math.random()*(tag_types.length-1) );
-			var tag_type = tag_types[tag_type_index];
-			tag.addClass('tag-'+tag_type);
-
+			tag.addClass('tag-primary');
 			$(this).before(tag);
 			$(this).val('');
 		}
 
 		if(e.keyCode == 8){//delete key: to remove a tag
+
 			if($(this).val().length == 0){
 				$(this).siblings('.tag').last().remove();
 			}
 		}
-
-		input_field.val();
 
 		var arr = [];
 		self.children('.tag').each(function(){
@@ -59,4 +73,48 @@ $.fn.extend({inputtag: function(){
 		width_helper.text( $(this).val() );
 		$(this).width( width_helper.width()+40 );
 	});
+
+	function attachDelSelectedTagsEvent(){
+		if(isDelSelectedTagsEventSet){
+			return;
+		}
+		$(document).bind('keydown.delSelectedTags', function(e){
+			if(e.keyCode == 8){
+				if(!self.hasClass("focus")){
+					preventDefault();
+					$('.tag-warning', self).remove();
+				}
+			}
+		});
+		isDelSelectedTagsEventSet = true;
+	}
+
+	function detachDelSelectedTagsEvent(){
+		$(document).unbind('keydown.delSelectedTags');
+		isDelSelectedTagsEventSet = false;
+	}
+
+	function resetSelectedTags(){
+		$('.tag-warning', self).removeClass('tag-warning').addClass('tag-primary');
+	}
+
+	function selectTag($tag){
+		$tag.addClass('tag-warning').removeClass('tag-primary');
+	}
+
+	function getEventTarget(e){
+		var evt = e || window.event;
+		return evt.target || evt.srcElement; 
+	}
+
+	function preventDefault(e){
+		var evt = e || window.event;
+		if(evt.preventDefault){
+			evt.preventDefault();
+		}
+		else{
+			evt.returnValue = false;
+		}
+	}
+
 }});
