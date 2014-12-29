@@ -1,5 +1,6 @@
 .input-tag{
 	padding: 0 1px;
+	font-size: 20px;
 	border: solid gray 1px;
 	font-weight: bold;
 	font-family: serif, monospace;
@@ -18,16 +19,12 @@
 .input-tag>* {
 	vertical-align: middle;
 	display: inline-block;
-	height: 44px;
-	line-height: 44px;
 	margin: 2px;
-	font-size: 40px;
+	line-height: inherit;
+	font-size: inherit;
 }
 .input-text{
-	padding: 0;
-	height: 44px;
-	line-height: 44px;
-	font-size: 40px;
+	padding: 1px;
 	width: 40px;
 	border: none !important;
 	outline: none !important;
@@ -37,6 +34,7 @@
 	-o-box-shadow: none !important;
 	font-weight: bold;
 	font-family: serif, monospace;
+	font-size: inherit;
 }
 .input-tag .width-helper{
 	display: none;
