@@ -16,12 +16,14 @@
 	-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
 	box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
 }
-.input-tag>* {
+.input-tag div {
 	vertical-align: middle;
 	display: inline-block;
 	margin: 2px;
 	line-height: inherit;
 	font-size: inherit;
+	*display:inline;
+	*zoom:1;
 }
 .input-text{
 	padding: 1px;
