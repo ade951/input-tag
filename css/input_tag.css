@@ -1,6 +1,4 @@
 .input-tag{
-	position: relative;
-	height: 50px;
 	padding: 0 1px;
 	border: solid gray 1px;
 	font-weight: bold;
@@ -21,17 +19,26 @@
 	vertical-align: middle;
 	display: inline-block;
 	height: 44px;
+	line-height: 44px;
 	margin: 2px;
 	font-size: 40px;
 }
 .input-text{
-	border: none;
-	outline: none;
+	padding: 0;
+	height: 44px;
+	line-height: 44px;
+	font-size: 40px;
+	width: 40px;
+	border: none !important;
+	outline: none !important;
+	box-shadow: none !important;
+	-moz-box-shadow: none !important;
+	-webkit-box-shadow: none !important;
+	-o-box-shadow: none !important;
 	font-weight: bold;
 	font-family: serif, monospace;
-	width: 40px;
 }
-.width-helper{
+.input-tag .width-helper{
 	display: none;
 }
 .tag{
