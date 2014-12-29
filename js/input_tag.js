@@ -16,8 +16,15 @@ $.fn.extend({inputtag: function(){
 
 	input_text.keydown(function(e){
 
-		if(e.keyCode == 13){//enter key: to finish a tag
+		//enter key or comma: to finish a tag
+		if(e.keyCode == 13 || e.keyCode == 188){
+			
+			e.preventDefault();
+
 			var tag_content = $(this).val();
+			if(!tag_content){
+				return;
+			}
 
 			var tag = $('<div class="tag">').text( tag_content );
 			var tag_types = ['primary', 'success', 'info', 'warning'];
