@@ -44,8 +44,8 @@ $.fn.extend({
 
 		self.input_text.keydown(function(e){
 
-			//enter key or comma: to finish a tag
-			if(e.keyCode == 13 || e.keyCode == 188){
+			//enter key or comma or space: to finish a tag
+			if(e.keyCode == 13 || e.keyCode == 188 || e.keyCode == 32){
 				
 				e.preventDefault();
 
