@@ -32,6 +32,16 @@ $.fn.extend({
 			}
 		}
 
+		//synchronize the tag values to the hidden input field
+		self.tag_sync = function(){
+
+			var arr = [];
+			self.children('.tag').each(function(){
+				arr.push($(this).text())
+			});
+			self.input_field.val( arr.join(',') );
+		}
+
 		self.click(function(){
 			self.input_text.focus();
 		});
@@ -40,6 +50,14 @@ $.fn.extend({
 			self.addClass('focus');
 		}).blur(function(){
 			self.removeClass('focus');
+		});
+
+		//click a tag to remove it
+		self.delegate('.tag', 'click', function(){
+			if( confirm('Are you sure to remove this tag?') ){
+				$(this).remove();
+				self.tag_sync();
+			}
 		});
 
 		self.input_text.keydown(function(e){
@@ -67,12 +85,7 @@ $.fn.extend({
 
 			self.input_field.val();
 
-			var arr = [];
-			self.children('.tag').each(function(){
-				arr.push($(this).text())
-			});
-			self.input_field.val( arr.join(',') );
-
+			self.tag_sync();
 
 		});
 

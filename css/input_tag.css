@@ -47,6 +47,7 @@
 	border: solid #ccc 1px;
 	padding-left: 5px;
 	padding-right: 5px;
+	cursor: not-allowed;
 }
 .tag-default {
   background-color: #777;
