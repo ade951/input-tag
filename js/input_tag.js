@@ -3,9 +3,9 @@ $.fn.extend({
 
 		var self = this;
 
-		var data_init = options['data_init'];
-		var max_tag_count = options['max_tag_count'] || 0;//0 means unlimited
-		var on_max_tag_count = options['on_max_tag_count'] || $.noop;
+		var data_init = options && options['data_init'];
+		var max_tag_count = options && options['max_tag_count'] || 0;//0 means unlimited
+		var on_max_tag_count = options && options['on_max_tag_count'] || $.noop;
 
 		if( self.attr('initialized') === 'true' ){
 			console.warn('warning: the input-tag already initialized!');
