@@ -18,11 +18,21 @@ $.fn.extend({
 				var tag_type = tag_types[tag_type_index];
 				tag.addClass('tag-'+tag_type);
 				self.input_text.before(tag);
+				self.tag_sync();
+		}
+
+		/**
+		* remove a single tag
+		* @param $tag  a jQuery selector object
+		*/
+		self.tag_remove = function($tag){
+			$tag.remove();
+			self.tag_sync();
 		}
 
 		//init tags from the input fields value
 		self.tag_init = function(){
-			var tags = self.input_field.val().trim();
+			var tags = self.attr('data-init').trim();
 			if( !tags ){
 				return;
 			}
@@ -55,8 +65,7 @@ $.fn.extend({
 		//click a tag to remove it
 		self.delegate('.tag', 'click', function(){
 			if( confirm('Are you sure to remove this tag?') ){
-				$(this).remove();
-				self.tag_sync();
+				self.tag_remove( $(this) );
 			}
 		});
 
@@ -79,13 +88,11 @@ $.fn.extend({
 
 			if(e.keyCode == 8){//delete key: to remove a tag
 				if($(this).val().length == 0){
-					$(this).siblings('.tag').last().remove();
+					self.tag_remove( $(this).siblings('.tag').last() );
 				}
 			}
 
 			self.input_field.val();
-
-			self.tag_sync();
 
 		});
 
