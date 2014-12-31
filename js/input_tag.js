@@ -1,7 +1,12 @@
 $.fn.extend({
-	inputtag: function(){
+	inputtag: function(options){
 
 		var self = this;
+
+		var data_init = options['data_init'];
+		var max_tag_count = options['max_tag_count'] || 0;//0 means unlimited
+		var on_max_tag_count = options['on_max_tag_count'] || $.noop;
+
 		if( self.attr('initialized') === 'true' ){
 			console.warn('warning: the input-tag already initialized!');
 			return false;
@@ -9,6 +14,7 @@ $.fn.extend({
 
 		self.input_text = self.children('.input-text');
 		self.input_field = self.children('.input-field');
+		self.tag_count = 0;
 
 		//add a single tag
 		self.tag_add = function(tag_content){
@@ -30,13 +36,18 @@ $.fn.extend({
 			self.tag_sync();
 		}
 
-		//init tags from the input fields value
-		self.tag_init = function(){
-			var tags = self.attr('data-init').trim();
+		/**
+		* init tags width some values
+		* @param tags [optional]
+		*/
+		self.tag_init = function(tags){
+			if( tags === undefined ){
+				tags = self.attr('data-init');
+			}
 			if( !tags ){
 				return;
 			}
-			tags = tags.split(',');
+			tags = tags.trim().split(',');
 			for(var k in tags){
 				self.tag_add( tags[k] );
 			}
@@ -49,6 +60,7 @@ $.fn.extend({
 			self.children('.tag').each(function(){
 				arr.push($(this).text())
 			});
+			self.tag_count = arr.length;
 			self.input_field.val( arr.join(',') );
 		}
 
@@ -71,6 +83,19 @@ $.fn.extend({
 
 		self.input_text.keydown(function(e){
 
+			//delete key: to remove a tag
+			if(e.keyCode == 8){
+				if($(this).val().length == 0){
+					self.tag_remove( $(this).siblings('.tag').last() );
+				}
+			}
+			else{//test if reach the limitation
+				if(max_tag_count != 0 && self.tag_count >= max_tag_count){
+					$(this).val('');
+					on_max_tag_count();
+				}
+			}
+
 			//enter key or comma or space: to finish a tag
 			if(e.keyCode == 13 || e.keyCode == 188 || e.keyCode == 32){
 				
@@ -86,14 +111,6 @@ $.fn.extend({
 				$(this).val('');
 			}
 
-			if(e.keyCode == 8){//delete key: to remove a tag
-				if($(this).val().length == 0){
-					self.tag_remove( $(this).siblings('.tag').last() );
-				}
-			}
-
-			self.input_field.val();
-
 		});
 
 		//fit width of the input field
@@ -104,7 +121,8 @@ $.fn.extend({
 		});
 
 
-		self.tag_init();
+
+		self.tag_init(data_init);
 		self.attr('initialized', true);
 		return self;
 	}

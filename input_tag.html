@@ -5,7 +5,7 @@
 		<meta charset="utf8">
 	</head>
 	<body>
-		<div class="input-tag" data-init="this,is,interesting">
+		<div class="input-tag" data-init="this,is,interesting"><!-- one way to init some tags -->
 			<input type="text" class="input-text">
 			<div class="width-helper"></div>
 			<input class="input-field" type="hidden" name="tag" value="">
@@ -15,7 +15,14 @@
 		<script type="text/javascript">
 		$(function(){
 			//init the input-tag plugin
-			tag = $('.input-tag').inputtag();
+			/* another way to init some tags, this will overwrite the first way */
+			tag = $('.input-tag').inputtag({
+				'data_init' : 'init,with,something',
+				'max_tag_count' : 3,
+				'on_max_tag_count' : function(){
+					console.warn('reach the limitation of tag count');
+				}
+			});
 		});
 		</script>
 	</body>
