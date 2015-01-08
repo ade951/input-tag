@@ -18,13 +18,17 @@ $.fn.extend({
 
 		//add a single tag
 		self.tag_add = function(tag_content){
-				var tag = $('<div class="tag">').text( tag_content );
-				var tag_types = ['primary', 'success', 'info', 'warning'];
-				var tag_type_index = Math.floor( Math.random()*(tag_types.length-1) );
-				var tag_type = tag_types[tag_type_index];
-				tag.addClass('tag-'+tag_type);
-				self.input_text.before(tag);
-				self.tag_sync();
+			if(is_reach_count_limit()){
+				on_max_tag_count();
+				return false;
+			}
+			var tag = $('<div class="tag">').text( tag_content );
+			var tag_types = ['primary', 'success', 'info', 'warning'];
+			var tag_type_index = Math.floor( Math.random()*(tag_types.length-1) );
+			var tag_type = tag_types[tag_type_index];
+			tag.addClass('tag-'+tag_type);
+			self.input_text.before(tag);
+			self.tag_sync();
 		}
 
 		/**
@@ -64,6 +68,11 @@ $.fn.extend({
 			self.input_field.val( arr.join(',') );
 		}
 
+		//test if reach the limitation
+		function is_reach_count_limit(){
+			return (max_tag_count != 0 && self.tag_count >= max_tag_count);
+		}
+
 		self.click(function(){
 			self.input_text.focus();
 		});
@@ -89,8 +98,8 @@ $.fn.extend({
 					self.tag_remove( $(this).siblings('.tag').last() );
 				}
 			}
-			else{//test if reach the limitation
-				if(max_tag_count != 0 && self.tag_count >= max_tag_count){
+			else{
+				if(is_reach_count_limit()){
 					$(this).val('');
 					on_max_tag_count();
 				}
